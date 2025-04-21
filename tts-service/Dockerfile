@@ -19,9 +19,6 @@ COPY tts.py .
 RUN pip install --upgrade pip
 RUN pip install TTS
 
-# Pre-download Vietnamese model (optional but recommended for speed)
-RUN python -c "from TTS.api import TTS; TTS.from_pretrained('tts_models/vi/vivos/glow-tts')"
-
 # Expose the port
 EXPOSE 5006
 
