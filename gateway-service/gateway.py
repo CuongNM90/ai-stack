@@ -13,13 +13,17 @@ STT_URL = "http://stt:5007/listen"
 def index():
     return app.send_static_file("index.html")
 
-@app.route("/tts", methods=["POST"])
+@app.route("/tts", methods=["POST", "OPTIONS"])
 def gateway_tts():
+    if request.method == "OPTIONS":
+        return '', 204
     response = requests.post(TTS_URL, json=request.get_json())
     return response.content, response.status_code, {"Content-Type": "audio/wav"}
 
-@app.route("/stt", methods=["POST"])
+@app.route("/stt", methods=["POST", "OPTIONS"])
 def gateway_stt():
+    if request.method == "OPTIONS":
+        return '', 204
     file = request.files.get("file")
     if not file:
         return jsonify({"error": "Missing file"}), 400
