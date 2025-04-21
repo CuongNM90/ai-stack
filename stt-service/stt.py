@@ -18,4 +18,4 @@ def listen():
     return jsonify({"text": result["text"]})
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5002)
+    app.run(host="0.0.0.0", port=5007)

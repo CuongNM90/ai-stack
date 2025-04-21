@@ -4,8 +4,8 @@ import io
 
 app = Flask(__name__)
 
-TTS_URL = "http://tts:5001/speak"
-STT_URL = "http://stt:5002/listen"
+TTS_URL = "http://tts:5006/speak"
+STT_URL = "http://stt:5007/listen"
 
 @app.route("/tts", methods=["POST"])
 def gateway_tts():
