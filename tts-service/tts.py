@@ -5,8 +5,8 @@ import os
 
 app = Flask(__name__)
 
-# ✅ Change to a Vietnamese-compatible model
-tts = TTS(model_name="tts_models/vi/vivos/glow-tts", progress_bar=False, gpu=False)
+# ✅ Use from_pretrained instead of model_name=
+tts = TTS.from_pretrained("tts_models/vi/vivos/glow-tts")
 
 @app.route("/speak", methods=["POST"])
 def speak():
