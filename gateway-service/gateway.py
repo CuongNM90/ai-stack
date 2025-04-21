@@ -2,7 +2,6 @@ from flask import Flask, request, jsonify, send_file
 import requests
 import io
 
-app = Flask(__name__)
 app = Flask(__name__, static_url_path="", static_folder="static")
 
 TTS_URL = "http://tts:5006/speak"
