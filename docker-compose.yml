@@ -3,7 +3,7 @@ services:
     build: ./gateway-service
     container_name: gateway
     ports:
-      - "5005:5000"
+      - "5005:5005"
     depends_on:
       - tts
       - stt
@@ -12,10 +12,10 @@ services:
     build: ./tts-service
     container_name: tts
     ports:
-      - "5006:5000"
+      - "5006:5006"
 
   stt:
     build: ./stt-service
     container_name: stt
     ports:
-      - "5007:5000"
+      - "5007:5007"
