@@ -7,6 +7,10 @@ app = Flask(__name__, static_url_path="", static_folder="static")
 TTS_URL = "http://tts:5006/speak"
 STT_URL = "http://stt:5007/listen"
 
+@app.route("/")
+def index():
+    return app.send_static_file("index.html")
+
 @app.route("/tts", methods=["POST"])
 def gateway_tts():
     response = requests.post(TTS_URL, json=request.get_json())
@@ -20,10 +24,6 @@ def gateway_stt():
 
     response = requests.post(STT_URL, files={"file": (file.filename, file.stream, file.mimetype)})
     return jsonify(response.json())
-
-@app.route("/")
-def index():
-    return app.send_static_file("index.html")
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5005)
