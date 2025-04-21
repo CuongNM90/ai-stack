@@ -3,6 +3,7 @@ import requests
 import io
 
 app = Flask(__name__, static_url_path="", static_folder="static")
+CORS(app)  # Cho phép gọi từ web
 
 TTS_URL = "http://tts:5006/speak"
 STT_URL = "http://stt:5007/listen"
