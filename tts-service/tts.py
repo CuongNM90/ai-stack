@@ -5,7 +5,7 @@ import os
 
 app = Flask(__name__)
 
-# ✅ Use from_pretrained instead of model_name=
+# ✅ Make sure this works with upgraded TTS
 tts = TTS.from_pretrained("tts_models/vi/vivos/glow-tts")
 
 @app.route("/speak", methods=["POST"])

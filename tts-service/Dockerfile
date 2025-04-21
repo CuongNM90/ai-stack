@@ -1,7 +1,6 @@
-# Use Python slim image
 FROM python:3.10-slim
 
-# Install required system packages
+# Install dependencies
 RUN apt-get update && apt-get install -y \
     git \
     espeak \
@@ -12,15 +11,18 @@ RUN apt-get update && apt-get install -y \
 # Set working directory
 WORKDIR /app
 
-# Copy your TTS server script
-COPY tts.py .
+# Copy project files (Portainer will handle cloning from Git)
+COPY . .
 
-# Install the latest Coqui TTS and dependencies
+# Install Python dependencies
 RUN pip install --upgrade pip
-RUN pip install TTS
+RUN pip install -r requirements.txt
 
-# Expose the port
+# Optional: print installed TTS version for debug
+RUN python -c "import TTS; print('Installed Coqui TTS version:', TTS.__version__)"
+
+# Expose the app port
 EXPOSE 5006
 
-# Run the TTS app
+# Start the app
 CMD ["python", "tts.py"]
