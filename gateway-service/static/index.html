@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AI Gateway Demo</title>
+</head>
+<body>
+  <h1>🔊 TTS (Text to Speech)</h1>
+  <textarea id="tts-text" rows="4" cols="50" placeholder="Nhập văn bản tại đây..."></textarea><br>
+  <button onclick="sendTTS()">Gửi TTS</button>
+  <audio id="tts-audio" controls></audio>
+
+  <hr>
+
+  <h1>🎙️ STT (Speech to Text)</h1>
+  <input type="file" id="stt-file" accept="audio/*"><br>
+  <button onclick="sendSTT()">Gửi STT</button>
+  <p id="stt-result"></p>
+
+  <script>
+    async function sendTTS() {
+      const text = document.getElementById("tts-text").value;
+      const res = await fetch("/tts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: text })
+      });
+      const blob = await res.blob();
+      const audioURL = URL.createObjectURL(blob);
+      document.getElementById("tts-audio").src = audioURL;
+    }
+
+    async function sendSTT() {
+      const fileInput = document.getElementById("stt-file");
+      const formData = new FormData();
+      formData.append("file", fileInput.files[0]);
+
+      const res = await fetch("/stt", {
+        method: "POST",
+        body: formData
+      });
+
+      const result = await res.json();
+      document.getElementById("stt-result").innerText = JSON.stringify(result);
+    }
+  </script>
+</body>
+</html>
