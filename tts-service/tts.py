@@ -4,7 +4,9 @@ import tempfile
 import os
 
 app = Flask(__name__)
-tts = TTS(model_name="tts_models/en/ljspeech/tacotron2-DDC", progress_bar=False, gpu=False)
+
+# ✅ Change to a Vietnamese-compatible model
+tts = TTS(model_name="tts_models/vi/vivos/glow-tts", progress_bar=False, gpu=False)
 
 @app.route("/speak", methods=["POST"])
 def speak():
