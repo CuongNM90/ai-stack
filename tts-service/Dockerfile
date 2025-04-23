@@ -12,10 +12,10 @@ RUN git clone https://github.com/nguyenthienhy/F5-TTS-Vietnamese.git && \
     cd F5-TTS-Vietnamese && \
     pip install .
 
-# Copy Flask app
+# Copy Flask app và requirements
 COPY tts.py .
 COPY requirements.txt .
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 EXPOSE 5006
 
