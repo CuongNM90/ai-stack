@@ -13,7 +13,7 @@ RUN git clone https://github.com/hynt-h/f5-tts.git && \
     pip install .
 
 # Copy Flask app
-COPY app.py .
+COPY tts.py .
 COPY requirements.txt .
 RUN pip install -r requirements.txt
 
