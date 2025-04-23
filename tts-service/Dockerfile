@@ -11,6 +11,9 @@ RUN apt-get update && \
 RUN git clone https://github.com/nguyenthienhy/F5-TTS-Vietnamese.git && \
     cd F5-TTS-Vietnamese && \
     pip install .
+# Clone bigvgan (thật ra là HiFi-GAN, bigvgan là 1 cấu hình)
+RUN git clone https://github.com/jik876/hifi-gan.git /bigvgan && \
+    pip install /bigvgan
 
 # Copy Flask app và requirements
 COPY tts.py .
