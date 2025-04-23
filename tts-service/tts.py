@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, send_file
+from flask import Flask, request, jsonify, send_file, after_this_request
 import subprocess
 import uuid
 import os
@@ -26,14 +26,27 @@ def tts_infer():
         "--vocoder_name", "vocos",
         "--vocab_file", os.path.join(model_dir, "vocab.txt"),
         "--ckpt_file", os.path.join(model_dir, "model_500000.pt"),
-        "--output_path", output_wav
+        "-w", output_wav  # ✅ Thay vì --output_path
     ]
 
     try:
         subprocess.run(command, check=True)
+
+        @after_this_request
+        def cleanup(response):
+            try:
+                os.remove(output_wav)
+            except Exception as e:
+                app.logger.error(f"Cleanup failed: {e}")
+            return response
+
         return send_file(output_wav, mimetype="audio/wav", as_attachment=True)
+
     except subprocess.CalledProcessError as e:
-        return jsonify({"error": "TTS inference failed", "detail": str(e)}), 500
+        return jsonify({
+            "error": "TTS inference failed",
+            "detail": str(e)
+        }), 500
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5006)
