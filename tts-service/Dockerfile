@@ -1,28 +1,22 @@
 FROM python:3.10-slim
 
-# Install dependencies
-RUN apt-get update && apt-get install -y \
-    git \
-    espeak \
-    libsndfile1 \
-    ffmpeg \
-    && rm -rf /var/lib/apt/lists/*
+# Avoid interactive tzdata install
+ENV DEBIAN_FRONTEND=noninteractive
 
-# Set working directory
 WORKDIR /app
 
-# Copy project files (Portainer will handle cloning from Git)
-COPY . .
+# Install dependencies
+RUN apt-get update && \
+    apt-get install -y libsndfile1 ffmpeg git && \
+    rm -rf /var/lib/apt/lists/*
 
-# Install Python dependencies
-RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
+# Install Python deps
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Optional: print installed TTS version for debug
-RUN python -c "import TTS; print('Installed Coqui TTS version:', TTS.__version__)"
+# Copy app
+COPY app.py .
 
-# Expose the app port
 EXPOSE 5006
 
-# Start the app
 CMD ["python", "tts.py"]

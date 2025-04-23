@@ -1,26 +1,26 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, send_file, jsonify
 from TTS.api import TTS
-import tempfile
+import uuid
 import os
 
 app = Flask(__name__)
 
-# ✅ Make sure this works with upgraded TTS
-tts = TTS.from_pretrained("tts_models/vi/vivos/glow-tts")
+# Load model
+MODEL_NAME = "hynt/F5-TTS-Vietnamese-100h"
+tts = TTS(MODEL_NAME, progress_bar=False, gpu=False)
 
-@app.route("/speak", methods=["POST"])
-def speak():
+@app.route("/tts", methods=["POST"])
+def synthesize():
     data = request.get_json()
     text = data.get("text", "")
-    if not text:
-        return jsonify({"error": "Missing 'text' field"}), 400
 
-    with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as f:
-        tts.tts_to_file(text=text, file_path=f.name)
-        with open(f.name, "rb") as audio_file:
-            audio_data = audio_file.read()
-        os.unlink(f.name)
-        return audio_data, 200, {"Content-Type": "audio/wav"}
+    if not text:
+        return jsonify({"error": "No text provided"}), 400
+
+    filename = f"/tmp/{uuid.uuid4().hex}.wav"
+    tts.tts_to_file(text=text, file_path=filename)
+
+    return send_file(filename, mimetype="audio/wav", as_attachment=True)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5006)
