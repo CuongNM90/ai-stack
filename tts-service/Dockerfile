@@ -1,21 +1,21 @@
 FROM python:3.10-slim
 
-# Avoid interactive tzdata install
-ENV DEBIAN_FRONTEND=noninteractive
-
 WORKDIR /app
 
 # Install dependencies
 RUN apt-get update && \
-    apt-get install -y libsndfile1 ffmpeg git && \
+    apt-get install -y git ffmpeg libsndfile1 && \
     rm -rf /var/lib/apt/lists/*
 
-# Install Python deps
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Clone repo
+RUN git clone https://github.com/hynt-h/f5-tts.git && \
+    cd f5-tts && \
+    pip install .
 
-# Copy app
+# Copy Flask app
 COPY app.py .
+COPY requirements.txt .
+RUN pip install -r requirements.txt
 
 EXPOSE 5006
 

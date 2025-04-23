@@ -1,26 +1,39 @@
-from flask import Flask, request, send_file, jsonify
-from TTS.api import TTS
+from flask import Flask, request, jsonify, send_file
+import subprocess
 import uuid
 import os
 
 app = Flask(__name__)
 
-# Load model
-MODEL_NAME = "hynt/F5-TTS-Vietnamese-100h"
-tts = TTS(MODEL_NAME, progress_bar=False, gpu=False)
-
 @app.route("/tts", methods=["POST"])
-def synthesize():
+def tts_infer():
     data = request.get_json()
     text = data.get("text", "")
+    speed = data.get("speed", 0.8)
 
     if not text:
-        return jsonify({"error": "No text provided"}), 400
+        return jsonify({"error": "Missing text"}), 400
 
-    filename = f"/tmp/{uuid.uuid4().hex}.wav"
-    tts.tts_to_file(text=text, file_path=filename)
+    uid = uuid.uuid4().hex
+    output_wav = f"/tmp/{uid}.wav"
+    model_dir = "/model"
 
-    return send_file(filename, mimetype="audio/wav", as_attachment=True)
+    command = [
+        "f5-tts_infer-cli",
+        "--model", "F5TTS_Base",
+        "--gen_text", text,
+        "--speed", str(speed),
+        "--vocoder_name", "vocos",
+        "--vocab_file", os.path.join(model_dir, "vocab.txt"),
+        "--ckpt_file", os.path.join(model_dir, "model_500000.pt"),
+        "--output_path", output_wav
+    ]
+
+    try:
+        subprocess.run(command, check=True)
+        return send_file(output_wav, mimetype="audio/wav", as_attachment=True)
+    except subprocess.CalledProcessError as e:
+        return jsonify({"error": "TTS inference failed", "detail": str(e)}), 500
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5006)
