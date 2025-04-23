@@ -15,7 +15,6 @@ services:
       - "5006:5006"
     volumes:
       - /var/ai-stack/models/f5tts:/model
-      - /var/ai-stack/models/vocos:/vocoder
 
   stt:
     build: ./stt-service
