@@ -13,6 +13,8 @@ services:
     container_name: tts
     ports:
       - "5006:5006"
+    volumes:
+      - var/apps/opt/ai-stack/model:/model
 
   stt:
     build: ./stt-service
