@@ -5,7 +5,7 @@ import os
 
 app = Flask(__name__)
 
-@app.route("/tts", methods=["POST"])
+@app.route("/speak", methods=["POST"])
 def tts_infer():
     data = request.get_json()
     text = data.get("text", "")
