@@ -8,8 +8,8 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Clone repo
-RUN git clone https://github.com/hynt-h/f5-tts.git && \
-    cd f5-tts && \
+RUN git clone https://github.com/nguyenthienhy/F5-TTS-Vietnamese.git && \
+    cd F5-TTS-Vietnamese && \
     pip install .
 
 # Copy Flask app
