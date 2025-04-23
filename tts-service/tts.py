@@ -24,8 +24,10 @@ def tts_infer():
         "--gen_text", text,
         "--speed", str(speed),
         "--vocoder_name", "vocos",
+        "--load_vocoder_from_local",  # ✅
         "--vocab_file", os.path.join(model_dir, "vocab.txt"),
         "--ckpt_file", os.path.join(model_dir, "model_500000.pt"),
+        "--vocoder_local_path", "/vocoder",  # ✅
         "-w", output_wav  # ✅ Thay vì --output_path
     ]
 
