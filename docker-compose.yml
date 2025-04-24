@@ -14,7 +14,7 @@ services:
     ports:
       - "5006:5006"
     volumes:
-      - /var/ai-stack/models/f5tts:/model
+      - /var/ai-stack/model/f5tts:/model
 
   stt:
     build: ./stt-service
