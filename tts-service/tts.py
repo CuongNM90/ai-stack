@@ -40,7 +40,7 @@ def tts_infer():
                 app.logger.error(f"Cleanup failed: {e}")
             return response
 
-        return send_file(output_wav, mimetype="audio/wav", as_attachment=True)
+        return send_file(output_wav, mimetype="audio/wav", conditional=True)
 
     except subprocess.CalledProcessError as e:
         return jsonify({
